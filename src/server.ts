@@ -115,14 +115,21 @@ Use the returned nextCursor to fetch additional pages.`,
 
   server.tool(
     'get_restaurant',
-    `Fetch a single restaurant review from The Infatuation by slug or URL.
+    `Fetch structured metadata for a single restaurant: rating, price, address,
+phone, website, reservation link, neighborhoods, cuisines, headline, short
+description, review URL, and Google Maps URL.
 
 Accepts either:
   - A full review URL: "https://www.theinfatuation.com/london/reviews/dishoom-covent-garden"
   - A bare slug:       "dishoom-covent-garden" (with optional city parameter)
 
-Returns the full review: rating, price, address, neighborhoods, cuisines, headline,
-description, website, reservation link, and review URL.`,
+IMPORTANT: this tool returns the metadata only — it does NOT include the full
+review text, the dishes to order, or "perfect for" occasion tags. When the
+user asks about a specific restaurant in conversational terms ("tell me
+about X", "what's Barshu like", "should I go to Y", "what's good at Z"), call
+get_restaurant_guide IN PARALLEL with this tool and combine the results.
+Do not summarize a restaurant from this tool's output alone — the actual
+review text lives in get_restaurant_guide.`,
     GetRestaurantInput,
     async (args) => {
       try {
@@ -135,20 +142,25 @@ description, website, reservation link, and review URL.`,
 
   server.tool(
     'get_restaurant_guide',
-    `Get a deeper guide for a single restaurant: dishes to order, occasions it's
-suited for, and the full review summary.
+    `Fetch the qualitative content for a single restaurant: the full review
+prose, the "Food Rundown" (specific dishes to order with descriptions), and
+"perfect for" occasion tags (date-night, big-groups, brunch, etc.).
 
 Accepts either:
   - A full review URL: "https://www.theinfatuation.com/london/reviews/dishoom-kings-cross"
   - A bare slug:       "dishoom-kings-cross" (with optional city parameter)
 
-Use this when the user wants to know WHAT to eat, or whether a restaurant fits
-a specific occasion (date night, big groups, brunch, etc.). For basic metadata
-(rating, address, phone, reservation link) use get_restaurant instead.
+WHEN TO CALL:
+  - Any conversational question about a specific restaurant ("tell me about X",
+    "what's good at Y", "is Z worth it", "what should I order at W").
+  - Always also call get_restaurant IN PARALLEL to get the metadata (address,
+    phone, reservation link) — neither tool returns the full picture alone.
 
-Returns: review summary, perfect-for tags, and a "what to order" list with
-descriptions for each dish. Not every review has a populated food rundown — if
-the result has an empty foodRundown array, the restaurant doesn't have one.`,
+Returns: reviewProse (the actual Infatuation editorial text — use this when
+summarizing a restaurant, do not invent context from training data),
+perfectFor[] (occasion slugs), foodRundown[] ({name, description} per dish).
+Not every review has a populated food rundown; an empty array means the
+restaurant just has a written review.`,
     GetRestaurantGuideInput,
     async (args) => {
       try {
