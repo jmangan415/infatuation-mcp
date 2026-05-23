@@ -39,6 +39,17 @@ Fetch a full review by slug or URL.
 | `slugOrUrl` | string | — | Slug (e.g. `"dishoom-covent-garden"`) or full review URL |
 | `city` | string | `"london"` | City slug (inferred from URL if provided) |
 
+### `get_restaurant_guide`
+
+Get a deeper guide for a single restaurant: dishes to order ("Food Rundown"), occasions it's suited for, and the full review prose. Use this when the user wants to know what to eat or whether a restaurant fits a specific occasion. For basic metadata (address, phone, reservation link) use `get_restaurant` instead.
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `slugOrUrl` | string | — | Slug (e.g. `"dishoom-kings-cross"`) or full review URL |
+| `city` | string | `"london"` | City slug (inferred from URL if provided) |
+
+Returns `name`, `rating`, `preview`, `reviewProse`, `perfectFor[]`, and `foodRundown[]` (each item has `name` + `description`). Not every review has a populated food rundown — some restaurants just have a summary. Results cached for 30 minutes.
+
 ### `discover_filters`
 
 List the available neighborhoods, cuisines, and vibes for a city. Call this first to find valid slug values.

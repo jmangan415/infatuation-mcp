@@ -1,9 +1,15 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
-import { SearchRestaurantsInput, GetRestaurantInput, DiscoverFiltersInput } from './schemas.js';
+import {
+  SearchRestaurantsInput,
+  GetRestaurantInput,
+  DiscoverFiltersInput,
+  GetRestaurantGuideInput,
+} from './schemas.js';
 import { searchRestaurants } from './tools/searchRestaurants.js';
 import { getRestaurant } from './tools/getRestaurant.js';
 import { discoverFilters } from './tools/discoverFilters.js';
 import { listCities } from './tools/listCities.js';
+import { getRestaurantGuide } from './tools/getRestaurantGuide.js';
 
 function wrapError(err: unknown) {
   const msg = err instanceof Error ? err.message : String(err);
@@ -121,6 +127,32 @@ description, website, reservation link, and review URL.`,
     async (args) => {
       try {
         return await getRestaurant(args as Parameters<typeof getRestaurant>[0]);
+      } catch (err) {
+        return wrapError(err);
+      }
+    }
+  );
+
+  server.tool(
+    'get_restaurant_guide',
+    `Get a deeper guide for a single restaurant: dishes to order, occasions it's
+suited for, and the full review summary.
+
+Accepts either:
+  - A full review URL: "https://www.theinfatuation.com/london/reviews/dishoom-kings-cross"
+  - A bare slug:       "dishoom-kings-cross" (with optional city parameter)
+
+Use this when the user wants to know WHAT to eat, or whether a restaurant fits
+a specific occasion (date night, big groups, brunch, etc.). For basic metadata
+(rating, address, phone, reservation link) use get_restaurant instead.
+
+Returns: review summary, perfect-for tags, and a "what to order" list with
+descriptions for each dish. Not every review has a populated food rundown — if
+the result has an empty foodRundown array, the restaurant doesn't have one.`,
+    GetRestaurantGuideInput,
+    async (args) => {
+      try {
+        return await getRestaurantGuide(args as Parameters<typeof getRestaurantGuide>[0]);
       } catch (err) {
         return wrapError(err);
       }

@@ -48,3 +48,12 @@ export const DiscoverFiltersInput = {
     'City slug to discover available filter values for, e.g. "london", "new-york".'
   ),
 };
+
+export const GetRestaurantGuideInput = {
+  slugOrUrl: z.string().min(1).max(500).describe(
+    'Restaurant review slug (e.g. "dishoom-kings-cross") or full Infatuation review URL.'
+  ),
+  city: citySlug.optional().describe(
+    'City slug. Inferred from URL if a full URL is provided; defaults to "london".'
+  ),
+};
