@@ -1,0 +1,30 @@
+{
+  "name": "infatuation-mcp",
+  "version": "1.0.0",
+  "description": "MCP server for searching The Infatuation restaurant reviews",
+  "license": "MIT",
+  "keywords": ["mcp", "mcp-server", "restaurants", "the-infatuation", "food", "reviews"],
+  "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
+  "bin": {
+    "infatuation-mcp": "dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx src/index.ts",
+    "start": "node dist/index.js",
+    "smoke": "tsx scripts/smoke.ts",
+    "query-test": "tsx scripts/query-test.ts"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.0",
+    "zod": "^3.25.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.8.0"
+  }
+}

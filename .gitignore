@@ -1,0 +1,11 @@
+node_modules/
+dist/
+*.js.map
+*.tsbuildinfo
+.env
+.DS_Store
+
+# Local dev artifacts
+IMPLEMENTATION_PLAN.md
+claude-code-guide.md
+test*.txt
