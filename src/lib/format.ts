@@ -1,7 +1,9 @@
 import type { CuisineObj, NeighborhoodObj, PostReview } from '../types.js';
 
 export function roundRating(n: number | null | undefined): number | null {
-  if (n == null) return null;
+  // The Infatuation never issues a true 0 rating; the API uses 0 as its unrated
+  // sentinel (the Contentful backend uses null for the same thing).
+  if (n == null || n === 0) return null;
   return Math.round(n * 10) / 10;
 }
 
