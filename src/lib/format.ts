@@ -135,7 +135,7 @@ export function formatReview(node: PostReview, compact = false): FormattedReview
         : '';
       lines.push(`**Reservations:** ${node.placeReservationUrl}${platform}`);
     }
-    lines.push(`**Review:** ${node.url}`);
+    lines.push(`**Infatuation Link:** ${node.url}`);
     lines.push(`**Google Maps:** ${mapsUrl}`);
     markdown = lines.join('\n');
   }

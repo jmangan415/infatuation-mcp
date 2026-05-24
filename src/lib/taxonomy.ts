@@ -97,10 +97,14 @@ export const FALLBACK_TAXONOMY: Record<string, CityTaxonomy> = {
   london: LONDON,
 };
 
+// Emergency fallback — only used if both the live sitemap scrape and GraphQL
+// aggregation fail simultaneously. Should cover the 25 most-searched cities.
 export const KNOWN_CITIES = [
+  // US — major metros
   'new-york', 'los-angeles', 'chicago', 'san-francisco', 'miami',
-  'london', 'austin', 'washington-dc', 'boston', 'seattle', 'nashville',
-  'dallas', 'atlanta', 'denver', 'portland', 'san-antonio', 'paris',
-  'rome', 'tokyo', 'mexico-city', 'toulouse', 'burlington', 'key-west',
-  'willamette-valley', 'las-vegas',
+  'washington-dc', 'boston', 'seattle', 'austin', 'nashville',
+  'atlanta', 'denver', 'portland', 'dallas', 'houston',
+  'philadelphia', 'las-vegas', 'new-orleans', 'san-diego', 'minneapolis',
+  // International
+  'london', 'paris', 'tokyo', 'mexico-city', 'barcelona',
 ];
