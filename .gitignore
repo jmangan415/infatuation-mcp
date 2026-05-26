@@ -8,4 +8,5 @@ dist/
 # Local dev artifacts
 IMPLEMENTATION_PLAN.md
 claude-code-guide.md
+CLAUDE.md
 test*.txt
