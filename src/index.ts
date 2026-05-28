@@ -14,15 +14,20 @@ process.stdin.on('close', () => process.exit(0));
 // Backstop for peers that wire stdio as Unix socketpairs and leak their end
 // without half-closing (observed with openclaw-gateway): 'end'/'close' never
 // fire, so the worker would otherwise run forever. Exit after IDLE_MS of no
-// inbound stdin traffic.
-const IDLE_MS = Number(process.env.INFATUATION_MCP_IDLE_MS ?? 5 * 60 * 1000);
-let lastActivity = Date.now();
-process.stdin.on('data', () => {
-  lastActivity = Date.now();
-});
-const idleTimer = setInterval(() => {
-  if (Date.now() - lastActivity > IDLE_MS) process.exit(0);
-}, 30_000);
-idleTimer.unref();
+// inbound stdin traffic. Disabled by default — enable via env var for clients
+// that need it (e.g. INFATUATION_MCP_IDLE_MS=300000 on the Pi).
+const IDLE_MS = process.env.INFATUATION_MCP_IDLE_MS
+  ? Number(process.env.INFATUATION_MCP_IDLE_MS)
+  : 0;
+if (IDLE_MS > 0) {
+  let lastActivity = Date.now();
+  process.stdin.on('data', () => {
+    lastActivity = Date.now();
+  });
+  const idleTimer = setInterval(() => {
+    if (Date.now() - lastActivity > IDLE_MS) process.exit(0);
+  }, 30_000);
+  idleTimer.unref();
+}
 
 await server.connect(transport);
