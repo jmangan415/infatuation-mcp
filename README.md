@@ -109,9 +109,9 @@ npm run dev
 
 | Env var | Default | Description |
 |---|---|---|
-| `INFATUATION_MCP_IDLE_MS` | `300000` (5 min) | Worker exits if no stdin data arrives for this many ms. Set higher for long-running interactive sessions, lower for aggressive cleanup. |
+| `INFATUATION_MCP_IDLE_MS` | _unset_ (disabled) | If set to a positive number, worker exits when no stdin data arrives for this many ms. Leave unset for well-behaved clients (Claude Desktop, etc.) that manage the connection lifecycle themselves. |
 
-The worker also exits immediately on stdin EOF/close (pipe-based clients). The idle timeout is a backstop for clients that wire stdio as Unix socketpairs and leak their end without closing it — without it, workers can pile up indefinitely.
+The worker exits immediately on stdin EOF/close (pipe-based clients). The idle timeout is an opt-in backstop for clients that wire stdio as Unix socketpairs and leak their end without closing it (e.g. `openclaw-gateway` on the Pi), where workers would otherwise pile up. Enable by adding `"env": { "INFATUATION_MCP_IDLE_MS": "300000" }` to the MCP server config.
 
 ## Verify the API
 
