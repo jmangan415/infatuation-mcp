@@ -113,6 +113,8 @@ npm run dev
 
 The worker exits immediately on stdin EOF/close (pipe-based clients). The idle timeout is an opt-in backstop for clients that wire stdio as Unix socketpairs and leak their end without closing it (e.g. `openclaw-gateway` on the Pi), where workers would otherwise pile up. Enable by adding `"env": { "INFATUATION_MCP_IDLE_MS": "300000" }` to the MCP server config.
 
+**Why opt-in?** A self-terminating worker triggers an "MCP server disconnected" banner in hosts that own the connection lifecycle themselves (e.g. Claude Desktop, which is also known to spawn a wrapper + server pair at launch — see [anthropics/claude-code#43597](https://github.com/anthropics/claude-code/issues/43597), benign and unrelated). The opt-in is enabled on a Pi running `openclaw-gateway 2026.4.23`, which exhibits the duplicate-spawn pattern from [openclaw#75621](https://github.com/openclaw/openclaw/issues/75621) and predates the cleanup fix in [openclaw#86412 / PR #86739](https://github.com/openclaw/openclaw/pull/86739). Once that fix lands in your host's release channel, the env var can be unset.
+
 ## Verify the API
 
 ```bash
