@@ -105,6 +105,14 @@ Add to your `claude_desktop_config.json`:
 npm run dev
 ```
 
+### Configuration
+
+| Env var | Default | Description |
+|---|---|---|
+| `INFATUATION_MCP_IDLE_MS` | `300000` (5 min) | Worker exits if no stdin data arrives for this many ms. Set higher for long-running interactive sessions, lower for aggressive cleanup. |
+
+The worker also exits immediately on stdin EOF/close (pipe-based clients). The idle timeout is a backstop for clients that wire stdio as Unix socketpairs and leak their end without closing it — without it, workers can pile up indefinitely.
+
 ## Verify the API
 
 ```bash
